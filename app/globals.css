@@ -49,33 +49,33 @@
 }
 
 :root {
-  --background: #f5f0e8;
-  --foreground: #201913;
-  --card: #fbf8f2;
-  --card-foreground: #201913;
-  --popover: #fbf8f2;
-  --popover-foreground: #201913;
-  --primary: #2d241d;
-  --primary-foreground: #fff8ea;
-  --secondary: #eee6da;
-  --secondary-foreground: #45372a;
-  --muted: #eee6da;
-  --muted-foreground: #806e5b;
-  --accent: #f0bd78;
-  --accent-foreground: #2d241d;
+  --background: #f7f8f3;
+  --foreground: #131b2b;
+  --card: #ffffff;
+  --card-foreground: #131b2b;
+  --popover: #ffffff;
+  --popover-foreground: #131b2b;
+  --primary: #101a36;
+  --primary-foreground: #f8fbff;
+  --secondary: #eef2f6;
+  --secondary-foreground: #24324a;
+  --muted: #eef2f6;
+  --muted-foreground: #617083;
+  --accent: #f4c95d;
+  --accent-foreground: #101a36;
   --destructive: #b85f50;
-  --border: #d8cdbd;
-  --input: #d8cdbd;
-  --ring: #a96738;
+  --border: #d6dee8;
+  --input: #d6dee8;
+  --ring: #335cff;
   --radius: 0.9rem;
-  --sidebar: #eee6da;
-  --sidebar-foreground: #201913;
-  --sidebar-primary: #2d241d;
-  --sidebar-primary-foreground: #fff8ea;
-  --sidebar-accent: #e5dacb;
-  --sidebar-accent-foreground: #45372a;
-  --sidebar-border: #d8cdbd;
-  --sidebar-ring: #a96738;
+  --sidebar: #eef2f6;
+  --sidebar-foreground: #131b2b;
+  --sidebar-primary: #101a36;
+  --sidebar-primary-foreground: #f8fbff;
+  --sidebar-accent: #e8edf3;
+  --sidebar-accent-foreground: #24324a;
+  --sidebar-border: #d6dee8;
+  --sidebar-ring: #335cff;
 }
 
 * {
@@ -87,7 +87,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background: #f5f0e8;
+  background: #f7f8f3;
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
@@ -109,18 +109,18 @@ body {
   width: 2.5rem;
   place-items: center;
   border-radius: 0.85rem;
-  border: 1px solid #3e3024;
-  background: #2d241d;
-  color: #f0bd78;
-  box-shadow: 0 3px 0 #c6b49e;
+  border: 1px solid #24324a;
+  background: #101a36;
+  color: #f4c95d;
+  box-shadow: 0 3px 0 #c9d2df;
 }
 
 .live-dot {
   height: 0.38rem;
   width: 0.38rem;
   border-radius: 999px;
-  background: #6f9c52;
-  box-shadow: 0 0 0 3px #cfe5bd;
+  background: #3f8c68;
+  box-shadow: 0 0 0 3px #c8eadc;
 }
 
 .eyebrow,
@@ -133,7 +133,7 @@ body {
 }
 
 .metric-label {
-  color: #917d66;
+  color: #738099;
 }
 .metric-value {
   margin-top: 0.35rem;
@@ -141,7 +141,7 @@ body {
   font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: -0.05em;
-  color: #433427;
+  color: #24324a;
 }
 
 .streak-dial {
@@ -151,7 +151,7 @@ body {
   flex-shrink: 0;
   place-items: center;
   border-radius: 999px;
-  background: conic-gradient(#f0bd78 0 58%, #4b3c2f 58% 100%);
+  background: conic-gradient(#f4c95d 0 58%, #324266 58% 100%);
   position: relative;
 }
 
@@ -159,7 +159,7 @@ body {
   position: absolute;
   inset: 0.35rem;
   border-radius: inherit;
-  background: #2d241d;
+  background: #101a36;
   content: '';
 }
 
@@ -183,7 +183,7 @@ body {
 }
 
 .activity-row:hover {
-  background: #f5f0e8;
+  background: #f1f4f8;
   transform: translateX(2px);
 }
 
@@ -194,11 +194,90 @@ body {
   flex-shrink: 0;
   place-items: center;
   border-radius: 0.6rem;
-  background: #e4efd9;
-  color: #6d9651;
+  background: #e1f1ea;
+  color: #3f8c68;
+}
+
+.site-header {
+  position: relative;
+  z-index: 2;
+}
+
+.zoomed-section {
+  position: relative;
+}
+
+.webflow-display {
+  text-wrap: balance;
+}
+
+.snapshot-card,
+.checkin-card,
+.activity-card,
+.workflow-card,
+.webflow-footer {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.snapshot-card:hover,
+.activity-card:hover,
+.workflow-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px rgb(20 35 65 / 12%);
+}
+
+.checkin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 25px 0 #c9d2df;
+}
+
+.webflow-hero::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: #d6dee8;
+  content: '';
+}
+
+.footer-mark {
+  box-shadow: 0 3px 0 #335cff;
+}
+
+.footer-label {
+  color: #aab8cf;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.footer-link {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.35rem;
+  color: #d5deea;
+  text-decoration: none;
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.footer-link:hover {
+  color: #f4c95d;
+  transform: translateX(3px);
 }
 
 @media (max-width: 640px) {
+  .webflow-hero::after {
+    display: none;
+  }
+
   .streak-dial {
     height: 6.5rem;
     width: 6.5rem;

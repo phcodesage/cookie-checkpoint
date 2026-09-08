@@ -319,15 +319,15 @@ export default function Home() {
   const isBusy = status === 'connecting' || status === 'signing';
 
   return (
-    <main className="min-h-screen bg-[#f5f0e8] text-[#201913]">
-      <div className="mx-auto max-w-[1440px] px-5 pb-12 sm:px-8 lg:px-12">
-        <header className="flex items-center justify-between border-b border-[#d8cdbd] py-5">
+    <main className="min-h-screen bg-[#f7f8f3] text-[#131b2b]">
+      <div className="mx-auto max-w-[1600px] px-5 pb-12 sm:px-10 lg:px-16">
+        <header className="site-header flex items-center justify-between border-b border-[#d6dee8] py-5">
           <div className="flex items-center gap-3">
             <div className="cookie-mark" aria-hidden="true">
               <Cookie className="size-5" strokeWidth={2.4} />
             </div>
             <div>
-              <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#846f59]">
+              <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#53647d]">
                 Cookie Chain
               </p>
               <p className="font-mono text-sm font-semibold tracking-tight">
@@ -336,8 +336,8 @@ export default function Home() {
             </div>
           </div>
 
-          <nav className="hidden items-center gap-7 text-sm font-medium text-[#766653] md:flex">
-            <a className="text-[#201913]" href="#check-in">
+          <nav className="hidden items-center gap-7 text-sm font-medium text-[#5d6b80] md:flex">
+            <a className="text-[#131b2b]" href="#check-in">
               Check in
             </a>
             <a href="#activity">Activity</a>
@@ -355,7 +355,7 @@ export default function Home() {
           <div className="flex items-center gap-2">
             {account ? (
               <Button
-                className="border border-[#cbbda9] bg-[#fbf8f2] text-[#3d3023] hover:bg-white"
+                className="border border-[#cbd4e0] bg-white text-[#1e2d4d] hover:bg-[#f3f6fa]"
                 onClick={copyAddress}
                 variant="outline"
               >
@@ -364,7 +364,7 @@ export default function Home() {
               </Button>
             ) : (
               <Button
-                className="bg-[#2e241c] text-[#fff9ed] shadow-[0_5px_0_#b5a38d] hover:bg-[#49382b]"
+                className="bg-[#101a36] text-[#f8fbff] shadow-[0_5px_0_#c9d2df] hover:bg-[#203dc2]"
                 onClick={connectWallet}
                 disabled={isBusy}
               >
@@ -379,33 +379,33 @@ export default function Home() {
           </div>
         </header>
 
-        <section className="grid gap-10 pb-12 pt-12 lg:grid-cols-[minmax(0,1fr)_390px] lg:items-end lg:pt-20">
-          <div className="max-w-3xl">
+        <section className="zoomed-section webflow-hero grid gap-10 pb-16 pt-16 lg:grid-cols-[minmax(0,1fr)_390px] lg:items-end lg:pb-24 lg:pt-28">
+          <div className="max-w-5xl">
             <div className="mb-6 flex flex-wrap items-center gap-2">
-              <Badge className="border border-[#b8d7a0] bg-[#e8f2df] text-[#3f6d32]">
+              <Badge className="border border-[#b8e2cf] bg-[#e5f3ec] text-[#2f795c]">
                 <span className="live-dot" /> Live on Cookie Chain
               </Badge>
-              <span className="text-sm text-[#897764]">
+              <span className="text-sm text-[#748197]">
                 A tiny action. A permanent signal.
               </span>
             </div>
-            <h1 className="max-w-4xl text-[clamp(3rem,7vw,6.6rem)] font-semibold leading-[0.92] tracking-[-0.075em] text-[#2a2019]">
+            <h1 className="webflow-display max-w-6xl text-[clamp(3.5rem,8vw,8.5rem)] font-semibold leading-[0.9] tracking-[-0.085em] text-[#0e1931]">
               Make your mark.
-              <span className="block text-[#a96738]">Keep the streak.</span>
+              <span className="block text-[#335cff]">Keep the streak.</span>
             </h1>
-            <p className="mt-7 max-w-xl text-lg leading-8 text-[#6d5c4a]">
+            <p className="mt-8 max-w-2xl text-lg leading-8 text-[#52627a]">
               Cookie Checkpoint turns a daily check-in into a verifiable Cookie
               Chain transaction. Connect Nightly, sign once, and leave a
               lightweight proof that you showed up.
             </p>
           </div>
 
-          <div className="rounded-[26px] border border-[#d8cdbd] bg-[#eee6da] p-5 shadow-[0_16px_40px_rgb(67_45_24/7%)]">
-            <div className="flex items-center justify-between border-b border-[#d8cdbd] pb-4">
-              <div className="flex items-center gap-2 text-sm font-semibold text-[#493b2d]">
-                <Radio className="size-4 text-[#7a9b50]" /> Network snapshot
+          <div className="snapshot-card rounded-[24px] border border-[#d6dee8] bg-white p-5 shadow-[0_20px_50px_rgb(20_35_65/8%)]">
+            <div className="flex items-center justify-between border-b border-[#e1e7ee] pb-4">
+              <div className="flex items-center gap-2 text-sm font-semibold text-[#24324a]">
+                <Radio className="size-4 text-[#3f8c68]" /> Network snapshot
               </div>
-              <span className="font-mono text-xs text-[#917c64]">
+              <span className="font-mono text-xs text-[#738099]">
                 RPC / COOKIE
               </span>
             </div>
@@ -423,7 +423,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <p className="mt-5 flex items-center gap-2 text-xs leading-5 text-[#806e5b]">
+            <p className="mt-5 flex items-center gap-2 text-xs leading-5 text-[#617083]">
               <LockKeyhole className="size-3.5 shrink-0" /> No custody. Nightly
               signs locally in your wallet.
             </p>
@@ -432,22 +432,22 @@ export default function Home() {
 
         <section
           id="check-in"
-          className="grid gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.8fr)]"
+          className="zoomed-section grid gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.8fr)]"
         >
-          <Card className="overflow-visible rounded-[30px] border-0 bg-[#2d241d] text-[#fff8ea] shadow-[0_22px_0_#c6b49e]">
+          <Card className="checkin-card overflow-visible rounded-[24px] border-0 bg-[#101a36] text-[#f8fbff] shadow-[0_22px_0_#c9d2df]">
             <CardHeader className="gap-5 p-7 pb-0 sm:p-10 sm:pb-0">
               <div className="flex items-start justify-between gap-5">
                 <div>
-                  <p className="eyebrow text-[#c7b79f]">Your next checkpoint</p>
-                  <CardTitle className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-[#fff8ea] sm:text-3xl">
+                  <p className="eyebrow text-[#aab8cf]">Your next checkpoint</p>
+                  <CardTitle className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-[#f8fbff] sm:text-3xl">
                     One block. One signal.
                   </CardTitle>
-                  <CardDescription className="mt-2 max-w-md text-[#c7b9a6]">
+                  <CardDescription className="mt-2 max-w-md text-[#b6c2d3]">
                     A zero-value self-transfer plus a readable memo makes your
                     check-in easy to verify in Cookiescan.
                   </CardDescription>
                 </div>
-                <div className="hidden rounded-full border border-[#665342] p-3 text-[#f0bd78] sm:block">
+                <div className="hidden rounded-full border border-[#445579] p-3 text-[#f4c95d] sm:block">
                   <Zap className="size-6" />
                 </div>
               </div>
@@ -460,7 +460,7 @@ export default function Home() {
                       <span className="font-mono text-4xl font-semibold">
                         {streak}
                       </span>
-                      <span className="text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#bfae98]">
+                      <span className="text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#aab5c7]">
                         days
                       </span>
                     </div>
@@ -469,7 +469,7 @@ export default function Home() {
                     <p className="text-lg font-semibold">
                       {streak ? 'You are in motion.' : 'Start your streak.'}
                     </p>
-                    <p className="mt-1 max-w-[230px] text-sm leading-6 text-[#c7b9a6]">
+                    <p className="mt-1 max-w-[230px] text-sm leading-6 text-[#b6c2d3]">
                       {streak
                         ? 'Come back tomorrow to make the signal stronger.'
                         : 'Your first check-in creates a public, verifiable proof of presence.'}
@@ -477,15 +477,15 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="min-w-[220px] flex-1 sm:max-w-[290px]">
-                  <div className="mb-2 flex justify-between text-xs font-semibold text-[#c7b9a6]">
+                  <div className="mb-2 flex justify-between text-xs font-semibold text-[#b6c2d3]">
                     <span>7-day rhythm</span>
                     <span>{streak}/7</span>
                   </div>
                   <Progress
                     value={progress}
-                    className="gap-0 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#4b3c2f] [&_[data-slot=progress-indicator]]:bg-[#f0bd78]"
+                    className="gap-0 [&_[data-slot=progress-track]]:h-2 [&_[data-slot=progress-track]]:bg-[#324266] [&_[data-slot=progress-indicator]]:bg-[#f4c95d]"
                   />
-                  <p className="mt-3 text-xs text-[#a99782]">
+                  <p className="mt-3 text-xs text-[#9da8b9]">
                     Network fees are paid by your connected wallet.
                   </p>
                 </div>
@@ -493,7 +493,7 @@ export default function Home() {
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button
-                  className="h-12 justify-center bg-[#f0bd78] px-5 text-[#2d241d] hover:bg-[#f7ca8d] sm:min-w-[230px]"
+                  className="h-12 justify-center bg-[#f4c95d] px-5 text-[#101a36] hover:bg-[#f7d77b] sm:min-w-[230px]"
                   onClick={createCheckpoint}
                   disabled={isBusy}
                 >
@@ -512,7 +512,7 @@ export default function Home() {
                 </Button>
                 {account && (
                   <Button
-                    className="text-[#c7b9a6] hover:bg-[#403329] hover:text-[#fff8ea]"
+                    className="text-[#b6c2d3] hover:bg-[#263660] hover:text-[#f8fbff]"
                     onClick={disconnectWallet}
                     variant="ghost"
                   >
@@ -522,7 +522,7 @@ export default function Home() {
               </div>
 
               <output
-                className={`mt-5 flex items-start gap-2 rounded-xl border px-3 py-3 text-sm ${status === 'error' ? 'border-[#b86b5c]/50 bg-[#5b332d]/50 text-[#f2c2b8]' : status === 'confirmed' ? 'border-[#86ac68]/40 bg-[#415833]/50 text-[#d4edc1]' : 'border-[#665342] bg-[#3b3027] text-[#d4c4ae]'}`}
+                className={`mt-5 flex items-start gap-2 rounded-xl border px-3 py-3 text-sm ${status === 'error' ? 'border-[#d67e73]/50 bg-[#542a35]/50 text-[#f4b3ab]' : status === 'confirmed' ? 'border-[#82c9a9]/40 bg-[#234838]/50 text-[#d0f0df]' : 'border-[#445579] bg-[#1d2b4d] text-[#c1ccdc]'}`}
                 aria-live="polite"
               >
                 {status === 'error' ? (
@@ -539,31 +539,31 @@ export default function Home() {
 
           <Card
             id="activity"
-            className="rounded-[30px] border-[#d8cdbd] bg-[#fbf8f2] shadow-[0_16px_36px_rgb(67_45_24/6%)]"
+            className="activity-card rounded-[24px] border-[#d6dee8] bg-white shadow-[0_20px_50px_rgb(20_35_65/7%)]"
           >
             <CardHeader className="p-7 pb-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="eyebrow text-[#a96738]">Activity</p>
+                  <p className="eyebrow text-[#335cff]">Activity</p>
                   <CardTitle className="mt-1 text-2xl tracking-[-0.04em]">
                     Your signal trail
                   </CardTitle>
                 </div>
-                <Activity className="size-5 text-[#a96738]" />
+                <Activity className="size-5 text-[#335cff]" />
               </div>
-              <CardDescription className="pt-1 text-[#806e5b]">
+              <CardDescription className="pt-1 text-[#617083]">
                 Local streak history and recent network signatures.
               </CardDescription>
             </CardHeader>
             <CardContent className="p-7 pt-3">
               <div className="space-y-3">
                 {activity.length === 0 && networkActivity.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-[#d8cdbd] bg-[#f5f0e8] p-5 text-center">
-                    <Cookie className="mx-auto size-6 text-[#b49d83]" />
-                    <p className="mt-3 text-sm font-semibold text-[#5d4c3b]">
+                  <div className="rounded-2xl border border-dashed border-[#d6dee8] bg-[#f7f8f3] p-5 text-center">
+                    <Cookie className="mx-auto size-6 text-[#8b98ab]" />
+                    <p className="mt-3 text-sm font-semibold text-[#52627a]">
                       No checkpoints yet
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-[#8b7964]">
+                    <p className="mt-1 text-xs leading-5 text-[#758399]">
                       Connect Nightly and make the first one.
                     </p>
                   </div>
@@ -581,14 +581,14 @@ export default function Home() {
                           <Check className="size-3.5" />
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block text-sm font-semibold text-[#45372a]">
+                          <span className="block text-sm font-semibold text-[#24324a]">
                             Checkpoint #{item.streak}
                           </span>
-                          <span className="block text-xs text-[#917d66]">
+                          <span className="block text-xs text-[#738099]">
                             {formatTime(item.createdAt)} · confirmed
                           </span>
                         </span>
-                        <ArrowUpRight className="size-4 text-[#ae9679]" />
+                        <ArrowUpRight className="size-4 text-[#7a90e8]" />
                       </a>
                     ))}
                     {activity.length === 0 &&
@@ -604,25 +604,25 @@ export default function Home() {
                             <Radio className="size-3.5" />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block text-sm font-semibold text-[#45372a]">
+                            <span className="block text-sm font-semibold text-[#24324a]">
                               Network transaction
                             </span>
-                            <span className="block truncate text-xs text-[#917d66]">
+                            <span className="block truncate text-xs text-[#738099]">
                               {shortAddress(item.signature)}
                             </span>
                           </span>
-                          <ArrowUpRight className="size-4 text-[#ae9679]" />
+                          <ArrowUpRight className="size-4 text-[#7a90e8]" />
                         </a>
                       ))}
                   </>
                 )}
               </div>
-              <div className="mt-6 flex items-center justify-between border-t border-[#e2d8ca] pt-5">
-                <span className="text-xs text-[#917d66]">
+              <div className="mt-6 flex items-center justify-between border-t border-[#e1e7ee] pt-5">
+                <span className="text-xs text-[#738099]">
                   {walletDetected ? 'Nightly detected' : 'Wallet not detected'}
                 </span>
                 <Button
-                  className="h-7 gap-1 px-2 text-xs text-[#6c563f]"
+                  className="h-7 gap-1 px-2 text-xs text-[#3d5df2]"
                   variant="ghost"
                   onClick={() => account && refreshNetwork(account)}
                 >
@@ -635,11 +635,11 @@ export default function Home() {
 
         <section
           id="how-it-works"
-          className="grid gap-5 py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-start"
+          className="zoomed-section grid gap-5 py-24 lg:grid-cols-[0.8fr_1.2fr] lg:items-start"
         >
           <div>
-            <p className="eyebrow text-[#a96738]">How it works</p>
-            <h2 className="mt-3 max-w-md text-4xl font-semibold leading-tight tracking-[-0.06em] text-[#2e241c]">
+            <p className="eyebrow text-[#335cff]">How it works</p>
+            <h2 className="mt-3 max-w-lg text-5xl font-semibold leading-[0.95] tracking-[-0.07em] text-[#101a36] sm:text-6xl">
               A little ritual for a chain that moves fast.
             </h2>
           </div>
@@ -663,28 +663,131 @@ export default function Home() {
             ].map(([number, title, copy]) => (
               <div
                 key={number}
-                className="rounded-2xl border border-[#d8cdbd] bg-[#eee6da] p-5"
+                className="workflow-card rounded-[20px] border border-[#d6dee8] bg-white p-6"
               >
-                <span className="font-mono text-xs font-bold text-[#b4875f]">
+                <span className="font-mono text-xs font-bold text-[#7a90e8]">
                   {number}
                 </span>
-                <h3 className="mt-5 text-lg font-semibold text-[#45372a]">
+                <h3 className="mt-5 text-lg font-semibold text-[#24324a]">
                   {title}
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-[#806e5b]">{copy}</p>
+                <p className="mt-2 text-sm leading-6 text-[#617083]">{copy}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <footer className="flex flex-col gap-4 border-t border-[#d8cdbd] pt-6 text-xs text-[#8d7963] sm:flex-row sm:items-center sm:justify-between">
-          <span className="inline-flex items-center gap-2">
-            <Cookie className="size-3.5" /> Open source experiment for Cookie
-            Chain.
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <Clipboard className="size-3.5" /> RPC: rpc.cookiescan.io
-          </span>
+        <footer className="webflow-footer mt-10 overflow-hidden rounded-[28px] bg-[#101a36] text-[#f8fbff]">
+          <div className="grid gap-12 px-7 py-10 sm:px-10 sm:py-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-14 lg:py-16">
+            <div className="max-w-md">
+              <div className="flex items-center gap-3">
+                <div className="cookie-mark footer-mark" aria-hidden="true">
+                  <Cookie className="size-5" strokeWidth={2.4} />
+                </div>
+                <div>
+                  <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#9da8b9]">
+                    Cookie Chain
+                  </p>
+                  <p className="font-mono text-sm font-semibold tracking-tight text-[#f8fbff]">
+                    CHECKPOINT
+                  </p>
+                </div>
+              </div>
+              <p className="mt-8 max-w-sm text-[clamp(2rem,4vw,4rem)] font-semibold leading-[0.95] tracking-[-0.07em]">
+                Leave a signal.
+              </p>
+              <p className="mt-5 max-w-sm text-sm leading-6 text-[#b6c2d3]">
+                A small open-source ritual for wallets, builders, and the chain
+                that moves fast.
+              </p>
+            </div>
+
+            <div>
+              <p className="footer-label">Explore</p>
+              <div className="mt-5 grid gap-3 text-sm text-[#d5deea]">
+                <a className="footer-link" href="#check-in">
+                  Check in
+                </a>
+                <a className="footer-link" href="#activity">
+                  Activity
+                </a>
+                <a className="footer-link" href="#how-it-works">
+                  How it works
+                </a>
+                <a
+                  className="footer-link"
+                  href={COOKIE_EXPLORER}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Cookiescan <ExternalLink className="size-3.5" />
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <p className="footer-label">Build</p>
+              <div className="mt-5 grid gap-3 text-sm text-[#d5deea]">
+                <a
+                  className="footer-link"
+                  href="https://docs.cookiechain.wtf/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Cookie docs <ExternalLink className="size-3.5" />
+                </a>
+                <a
+                  className="footer-link"
+                  href="https://docs.cookiechain.wtf/developer-guide"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Developer guide <ExternalLink className="size-3.5" />
+                </a>
+                <a
+                  className="footer-link"
+                  href="https://docs.nightly.app/docs/solana/solana/connect/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Nightly docs <ExternalLink className="size-3.5" />
+                </a>
+                <a
+                  className="footer-link"
+                  href="https://github.com/phcodesage/cookie-checkpoint"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Source code <ExternalLink className="size-3.5" />
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <p className="footer-label">Network</p>
+              <div className="mt-5 space-y-4 text-sm text-[#d5deea]">
+                <p className="flex items-start gap-2">
+                  <Radio className="mt-0.5 size-4 text-[#f4c95d]" /> Cookie
+                  Chain RPC
+                  <br />
+                  <span className="font-mono text-xs text-[#9da8b9]">
+                    rpc.cookiescan.io
+                  </span>
+                </p>
+                <p className="flex items-start gap-2">
+                  <LockKeyhole className="mt-0.5 size-4 text-[#82c9a9]" />{' '}
+                  Non-custodial by design
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-3 border-t border-[#2b3a5d] px-7 py-5 text-xs text-[#9da8b9] sm:flex-row sm:items-center sm:justify-between sm:px-14">
+            <span className="inline-flex items-center gap-2">
+              <Clipboard className="size-3.5" /> Open-source experiment for
+              Cookie Chain.
+            </span>
+            <span>Built for the Cookie Chain cApp bounty.</span>
+          </div>
         </footer>
       </div>
     </main>
