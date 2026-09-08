@@ -1,0 +1,206 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #f5f0e8;
+  --foreground: #201913;
+  --card: #fbf8f2;
+  --card-foreground: #201913;
+  --popover: #fbf8f2;
+  --popover-foreground: #201913;
+  --primary: #2d241d;
+  --primary-foreground: #fff8ea;
+  --secondary: #eee6da;
+  --secondary-foreground: #45372a;
+  --muted: #eee6da;
+  --muted-foreground: #806e5b;
+  --accent: #f0bd78;
+  --accent-foreground: #2d241d;
+  --destructive: #b85f50;
+  --border: #d8cdbd;
+  --input: #d8cdbd;
+  --ring: #a96738;
+  --radius: 0.9rem;
+  --sidebar: #eee6da;
+  --sidebar-foreground: #201913;
+  --sidebar-primary: #2d241d;
+  --sidebar-primary-foreground: #fff8ea;
+  --sidebar-accent: #e5dacb;
+  --sidebar-accent-foreground: #45372a;
+  --sidebar-border: #d8cdbd;
+  --sidebar-ring: #a96738;
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f5f0e8;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+.cookie-mark {
+  display: grid;
+  height: 2.5rem;
+  width: 2.5rem;
+  place-items: center;
+  border-radius: 0.85rem;
+  border: 1px solid #3e3024;
+  background: #2d241d;
+  color: #f0bd78;
+  box-shadow: 0 3px 0 #c6b49e;
+}
+
+.live-dot {
+  height: 0.38rem;
+  width: 0.38rem;
+  border-radius: 999px;
+  background: #6f9c52;
+  box-shadow: 0 0 0 3px #cfe5bd;
+}
+
+.eyebrow,
+.metric-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.metric-label {
+  color: #917d66;
+}
+.metric-value {
+  margin-top: 0.35rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: #433427;
+}
+
+.streak-dial {
+  display: grid;
+  height: 7.6rem;
+  width: 7.6rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 999px;
+  background: conic-gradient(#f0bd78 0 58%, #4b3c2f 58% 100%);
+  position: relative;
+}
+
+.streak-dial::before {
+  position: absolute;
+  inset: 0.35rem;
+  border-radius: inherit;
+  background: #2d241d;
+  content: '';
+}
+
+.streak-dial-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.activity-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.85rem;
+  padding: 0.65rem;
+  text-decoration: none;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.activity-row:hover {
+  background: #f5f0e8;
+  transform: translateX(2px);
+}
+
+.activity-icon {
+  display: grid;
+  height: 1.75rem;
+  width: 1.75rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 0.6rem;
+  background: #e4efd9;
+  color: #6d9651;
+}
+
+@media (max-width: 640px) {
+  .streak-dial {
+    height: 6.5rem;
+    width: 6.5rem;
+  }
+}
