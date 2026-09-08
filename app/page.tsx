@@ -17,6 +17,7 @@ import {
   WalletMinimal,
   Zap,
 } from 'lucide-react';
+import bs58 from 'bs58';
 import {
   Connection,
   LAMPORTS_PER_SOL,
@@ -77,7 +78,16 @@ type NightlySolana = {
       signTransaction: (input: {
         account: NightlyAccount;
         transaction: Uint8Array;
+        chain?: string;
       }) => Promise<readonly { signedTransaction: Uint8Array }[]>;
+    };
+    'standard:signAndSendTransaction'?: {
+      signAndSendTransaction: (input: {
+        account: NightlyAccount;
+        transaction: Uint8Array;
+        chain: string;
+        options?: { commitment?: 'processed' | 'confirmed' | 'finalized' };
+      }) => Promise<readonly { signature: Uint8Array }[]>;
     };
   };
 };
@@ -284,10 +294,13 @@ export default function Home() {
     const nightly = window.nightly?.solana;
     const signTransaction =
       nightly?.features['standard:signTransaction']?.signTransaction;
-    if (!nightly || !signTransaction) {
+    const signAndSendTransaction =
+      nightly?.features['standard:signAndSendTransaction']
+        ?.signAndSendTransaction;
+    if (!nightly || (!signTransaction && !signAndSendTransaction)) {
       setStatus('error');
       setMessage(
-        'Nightly signing is unavailable. Update Nightly and try again.',
+        'Nightly does not expose a transaction signing method. Update Nightly and try again.',
       );
       return;
     }
@@ -306,6 +319,7 @@ export default function Home() {
         return;
       }
 
+      const chain = `solana:${targetGenesisHash}`;
       const publicKey = new PublicKey(account.address);
       const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash('confirmed');
@@ -331,20 +345,38 @@ export default function Home() {
       transaction.feePayer = publicKey;
       transaction.recentBlockhash = blockhash;
 
-      const [signed] = await signTransaction({
-        account,
-        transaction: transaction.serialize({
-          requireAllSignatures: false,
-          verifySignatures: false,
-        }),
+      const serializedTransaction = transaction.serialize({
+        requireAllSignatures: false,
+        verifySignatures: false,
       });
-      if (!signed?.signedTransaction)
-        throw new Error('Nightly did not return a signed transaction.');
+      let signature: string;
+      if (signTransaction) {
+        const [signed] = await signTransaction({
+          account,
+          chain,
+          transaction: serializedTransaction,
+        });
+        if (!signed?.signedTransaction)
+          throw new Error('Nightly did not return a signed transaction.');
 
-      const signature = await connection.sendRawTransaction(
-        signed.signedTransaction,
-        { preflightCommitment: 'confirmed' },
-      );
+        signature = await connection.sendRawTransaction(
+          signed.signedTransaction,
+          { preflightCommitment: 'confirmed' },
+        );
+      } else if (signAndSendTransaction) {
+        const [sent] = await signAndSendTransaction({
+          account,
+          chain,
+          transaction: serializedTransaction,
+          options: { commitment: 'confirmed' },
+        });
+        if (!sent?.signature)
+          throw new Error('Nightly did not return a transaction signature.');
+
+        signature = bs58.encode(sent.signature);
+      } else {
+        throw new Error('Nightly transaction signing is unavailable.');
+      }
       await connection.confirmTransaction(
         { signature, blockhash, lastValidBlockHeight },
         'confirmed',
