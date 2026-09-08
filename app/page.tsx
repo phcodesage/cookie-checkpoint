@@ -223,11 +223,20 @@ export default function Home() {
     setMessage('Opening Nightly…');
     try {
       const targetGenesisHash = await connection.getGenesisHash();
-      if (nightly.genesisHash !== targetGenesisHash && nightly.changeNetwork) {
-        await nightly.changeNetwork({
-          genesisHash: targetGenesisHash,
-          url: COOKIE_RPC,
-        });
+      let networkSwitchFailed = false;
+      if (nightly.genesisHash !== targetGenesisHash) {
+        if (!nightly.changeNetwork) {
+          networkSwitchFailed = true;
+        } else {
+          try {
+            await nightly.changeNetwork({
+              genesisHash: targetGenesisHash,
+              url: COOKIE_RPC,
+            });
+          } catch {
+            networkSwitchFailed = true;
+          }
+        }
       }
 
       const result = await connect({ silent: false });
@@ -237,10 +246,17 @@ export default function Home() {
 
       setAccount(connectedAccount);
       setWalletDetected(true);
-      setStatus('idle');
-      setMessage(
-        'Wallet ready. Your next checkpoint will be written to Cookie Chain.',
-      );
+      if (networkSwitchFailed) {
+        setStatus('error');
+        setMessage(
+          'Nightly connected, but could not switch automatically. Select Cookie Chain in Nightly, then try again.',
+        );
+      } else {
+        setStatus('idle');
+        setMessage(
+          'Wallet ready. Your next checkpoint will be written to Cookie Chain.',
+        );
+      }
       refreshNetwork(connectedAccount).catch(() => undefined);
     } catch (error) {
       setStatus('error');
@@ -265,10 +281,10 @@ export default function Home() {
       return;
     }
 
+    const nightly = window.nightly?.solana;
     const signTransaction =
-      window.nightly?.solana?.features['standard:signTransaction']
-        ?.signTransaction;
-    if (!signTransaction) {
+      nightly?.features['standard:signTransaction']?.signTransaction;
+    if (!nightly || !signTransaction) {
       setStatus('error');
       setMessage(
         'Nightly signing is unavailable. Update Nightly and try again.',
@@ -281,6 +297,15 @@ export default function Home() {
       'Approve the checkpoint in Nightly. Only the network fee is charged.',
     );
     try {
+      const targetGenesisHash = await connection.getGenesisHash();
+      if (nightly.genesisHash && nightly.genesisHash !== targetGenesisHash) {
+        setStatus('error');
+        setMessage(
+          'Nightly is connected to another network. Select Cookie Chain in Nightly, then try again.',
+        );
+        return;
+      }
+
       const publicKey = new PublicKey(account.address);
       const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash('confirmed');
