@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Cookie Checkpoint | Cookie Chain',
   description: 'Make a verifiable daily signal on Cookie Chain with Nightly.',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

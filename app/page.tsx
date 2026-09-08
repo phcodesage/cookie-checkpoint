@@ -26,7 +26,7 @@ import {
   TransactionInstruction,
 } from '@solana/web3.js';
 import { Buffer } from 'buffer';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -113,9 +113,7 @@ function readStoredActivity() {
 
 export default function Home() {
   const [account, setAccount] = useState<NightlyAccount | null>(null);
-  const [walletDetected, setWalletDetected] = useState(
-    () => typeof window !== 'undefined' && Boolean(window.nightly?.solana),
-  );
+  const [walletDetected, setWalletDetected] = useState(false);
   const [status, setStatus] = useState<
     'idle' | 'connecting' | 'signing' | 'confirmed' | 'error'
   >('idle');
@@ -131,6 +129,35 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
 
   const connection = useMemo(() => new Connection(COOKIE_RPC, 'confirmed'), []);
+
+  const detectWallet = useCallback(() => {
+    const detected =
+      typeof window !== 'undefined' && Boolean(window.nightly?.solana);
+    setWalletDetected(detected);
+    return detected;
+  }, []);
+
+  useEffect(() => {
+    let attempts = 0;
+    const check = () => {
+      attempts += 1;
+      if (detectWallet() || attempts >= 24) window.clearInterval(timer);
+    };
+    const timer = window.setInterval(check, 250);
+    const handleFocus = () => detectWallet();
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') detectWallet();
+    };
+
+    check();
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, [detectWallet]);
 
   const refreshNetwork = useCallback(
     async (wallet: NightlyAccount) => {
@@ -159,12 +186,26 @@ export default function Home() {
   const streak = activity.length ? activity[0].streak : 0;
   const progress = Math.min((streak / 7) * 100, 100);
 
+  function checkWallet() {
+    if (detectWallet()) {
+      setStatus('idle');
+      setMessage('Nightly detected. Connect when you are ready.');
+      return;
+    }
+
+    setStatus('error');
+    setMessage(
+      'Nightly is still unavailable. Enable this site in the extension, then reload.',
+    );
+  }
+
   async function connectWallet() {
     const nightly = window.nightly?.solana;
+    setWalletDetected(Boolean(nightly));
     if (!nightly) {
       setStatus('error');
       setMessage(
-        'Nightly was not detected. Install the Nightly extension, then reload this page.',
+        'Nightly was not detected. Enable this site in the extension, then reload.',
       );
       return;
     }
@@ -382,10 +423,10 @@ export default function Home() {
         <section className="zoomed-section webflow-hero grid gap-10 pb-16 pt-16 lg:grid-cols-[minmax(0,1fr)_390px] lg:items-end lg:pb-24 lg:pt-28">
           <div className="max-w-5xl">
             <div className="mb-6 flex flex-wrap items-center gap-2">
-              <Badge className="border border-[#b8e2cf] bg-[#e5f3ec] text-[#2f795c]">
+              <Badge className="h-7 border border-[#86d0ad] bg-[#d9f4e6] px-3 font-semibold text-[#176443] shadow-[0_3px_0_#b9dfca]">
                 <span className="live-dot" /> Live on Cookie Chain
               </Badge>
-              <span className="text-sm text-[#748197]">
+              <span className="text-sm font-semibold text-[#335cff]">
                 A tiny action. A permanent signal.
               </span>
             </div>
@@ -622,11 +663,14 @@ export default function Home() {
                   {walletDetected ? 'Nightly detected' : 'Wallet not detected'}
                 </span>
                 <Button
-                  className="h-7 gap-1 px-2 text-xs text-[#3d5df2]"
+                  className="h-8 gap-1 px-2 text-xs font-semibold text-[#335cff]"
                   variant="ghost"
-                  onClick={() => account && refreshNetwork(account)}
+                  onClick={() =>
+                    account ? refreshNetwork(account) : checkWallet()
+                  }
                 >
-                  <RefreshCw className="size-3.5" /> Refresh
+                  <RefreshCw className="size-3.5" />
+                  {account ? 'Refresh' : 'Check wallet'}
                 </Button>
               </div>
             </CardContent>
