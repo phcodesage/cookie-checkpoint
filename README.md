@@ -26,6 +26,14 @@ npm run dev
 
 Open `http://localhost:3000` in a browser with Nightly installed.
 
+## Deploy to Vercel
+
+The Vercel build uses Vinext's static export for this single-route app and serves the generated `dist/client` directory:
+
+```bash
+npx vercel --prod
+```
+
 ## Cookie Chain configuration
 
 The app uses the official Cookie Chain RPC endpoint:
