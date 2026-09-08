@@ -2,6 +2,14 @@
 
 Cookie Checkpoint is a small, open-source on-chain streak app for Cookie Chain. It turns a daily check-in into a verifiable transaction that can be opened in Cookiescan.
 
+## Live demo
+
+- App: https://cookie-checkpoint.vercel.app
+- Source: https://github.com/phcodesage/cookie-checkpoint
+- Explorer: https://cookiescan.io/
+
+To try a real check-in, connect Nightly on Cookie Chain and keep a small COOK balance for network fees. If you need COOK on the network, use the official Hyperlane bridge at https://hyperlane.cookiescan.io/.
+
 ## What it does
 
 - Detects and connects to Nightly through the standard Solana wallet interface.
@@ -10,6 +18,8 @@ Cookie Checkpoint is a small, open-source on-chain streak app for Cookie Chain. 
 - Creates a signed check-in transaction using a zero-value self-transfer and a readable Memo Program payload.
 - Waits for confirmation and links each completed checkpoint to Cookiescan.
 - Keeps the local streak trail in browser storage; the signed checkpoint itself is public on-chain activity.
+
+The app does not deploy a custom program or token. Each checkpoint uses a zero-value self-transfer plus a readable Memo Program instruction, keeping the demo lightweight while still producing a real, verifiable Cookie Chain transaction.
 
 ## Run locally
 
@@ -64,5 +74,6 @@ The generated Sites UI catalog currently contains unrelated lint findings when r
 
 - Cookie Chain docs: https://docs.cookiechain.wtf/
 - Cookie Chain builder guide: https://docs.cookiechain.wtf/developer-guide
+- Cookie Chain bridge: https://hyperlane.cookiescan.io/
 - Cookiescan: https://cookiescan.io/
 - Nightly Solana integration docs: https://docs.nightly.app/docs/solana/solana/connect/
