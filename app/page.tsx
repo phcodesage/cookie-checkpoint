@@ -41,6 +41,7 @@ import {
 import { Progress } from '@/components/ui/progress';
 
 const COOKIE_RPC = 'https://rpc.cookiescan.io';
+const COOKIE_DOCS = 'https://docs.cookiechain.wtf/wallets';
 const COOKIE_EXPLORER = 'https://cookiescan.io';
 const COOKIE_CHECKPOINT_MEMO = 'CookieCheckpoint:v1';
 const MEMO_PROGRAM_ID = new PublicKey(
@@ -63,10 +64,6 @@ type NightlyAccount = {
 
 type NightlySolana = {
   genesisHash?: string;
-  changeNetwork?: (network: {
-    genesisHash: string;
-    url: string;
-  }) => Promise<void>;
   features: {
     'standard:connect'?: {
       connect: (input?: { silent?: boolean }) => Promise<{
@@ -124,6 +121,7 @@ function readStoredActivity() {
 export default function Home() {
   const [account, setAccount] = useState<NightlyAccount | null>(null);
   const [walletDetected, setWalletDetected] = useState(false);
+  const [networkSwitchNeeded, setNetworkSwitchNeeded] = useState(false);
   const [status, setStatus] = useState<
     'idle' | 'connecting' | 'signing' | 'confirmed' | 'error'
   >('idle');
@@ -137,6 +135,7 @@ export default function Home() {
   const [balance, setBalance] = useState<number | null>(null);
   const [slot, setSlot] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
+  const [rpcCopied, setRpcCopied] = useState(false);
 
   const connection = useMemo(() => new Connection(COOKIE_RPC, 'confirmed'), []);
 
@@ -233,22 +232,6 @@ export default function Home() {
     setMessage('Opening Nightly…');
     try {
       const targetGenesisHash = await connection.getGenesisHash();
-      let networkSwitchFailed = false;
-      if (nightly.genesisHash !== targetGenesisHash) {
-        if (!nightly.changeNetwork) {
-          networkSwitchFailed = true;
-        } else {
-          try {
-            await nightly.changeNetwork({
-              genesisHash: targetGenesisHash,
-              url: COOKIE_RPC,
-            });
-          } catch {
-            networkSwitchFailed = true;
-          }
-        }
-      }
-
       const result = await connect({ silent: false });
       const connectedAccount = result.accounts[0];
       if (!connectedAccount)
@@ -256,12 +239,14 @@ export default function Home() {
 
       setAccount(connectedAccount);
       setWalletDetected(true);
-      if (networkSwitchFailed) {
-        setStatus('error');
+      if (nightly.genesisHash !== targetGenesisHash) {
+        setNetworkSwitchNeeded(true);
+        setStatus('idle');
         setMessage(
-          'Nightly connected, but could not switch automatically. Select Cookie Chain in Nightly, then try again.',
+          'Nightly connected. Add Cookie Chain’s custom RPC in Nightly, then check the setup below.',
         );
       } else {
+        setNetworkSwitchNeeded(false);
         setStatus('idle');
         setMessage(
           'Wallet ready. Your next checkpoint will be written to Cookie Chain.',
@@ -278,9 +263,49 @@ export default function Home() {
     }
   }
 
+  async function checkCookieChainSetup() {
+    const nightly = window.nightly?.solana;
+    if (!nightly) {
+      setStatus('error');
+      setMessage(
+        'Nightly was not detected. Enable this site in the extension, then reload.',
+      );
+      return;
+    }
+
+    setStatus('connecting');
+    setMessage('Checking Nightly’s active network…');
+    try {
+      const targetGenesisHash = await connection.getGenesisHash();
+      if (nightly.genesisHash !== targetGenesisHash) {
+        setNetworkSwitchNeeded(true);
+        setStatus('error');
+        setMessage(
+          'Nightly is still on another network. Add Cookie Chain’s custom RPC, then check again.',
+        );
+        return;
+      }
+
+      setNetworkSwitchNeeded(false);
+      setStatus('idle');
+      setMessage(
+        'Cookie Chain is active. Your next checkpoint will be written to Cookie Chain.',
+      );
+      if (account) refreshNetwork(account).catch(() => undefined);
+    } catch (error) {
+      setStatus('error');
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : 'Could not verify Nightly’s active network.',
+      );
+    }
+  }
+
   async function disconnectWallet() {
     await window.nightly?.solana?.features['standard:disconnect']?.disconnect();
     setAccount(null);
+    setNetworkSwitchNeeded(false);
     setStatus('idle');
     setMessage('Wallet disconnected.');
   }
@@ -311,10 +336,11 @@ export default function Home() {
     );
     try {
       const targetGenesisHash = await connection.getGenesisHash();
-      if (nightly.genesisHash && nightly.genesisHash !== targetGenesisHash) {
+      if (nightly.genesisHash !== targetGenesisHash) {
+        setNetworkSwitchNeeded(true);
         setStatus('error');
         setMessage(
-          'Nightly is connected to another network. Select Cookie Chain in Nightly, then try again.',
+          'Nightly is not on Cookie Chain. Add the custom RPC in Nightly, then check the setup below.',
         );
         return;
       }
@@ -413,7 +439,17 @@ export default function Home() {
     window.setTimeout(() => setCopied(false), 1600);
   }
 
-  const actionLabel = account ? 'Check in on Cookie Chain' : 'Connect Nightly';
+  async function copyCookieRpc() {
+    await navigator.clipboard.writeText(COOKIE_RPC);
+    setRpcCopied(true);
+    window.setTimeout(() => setRpcCopied(false), 1800);
+  }
+
+  const actionLabel = !account
+    ? 'Connect Nightly'
+    : networkSwitchNeeded
+      ? 'Check Cookie Chain setup'
+      : 'Check in on Cookie Chain';
   const isBusy = status === 'connecting' || status === 'signing';
 
   return (
@@ -592,10 +628,14 @@ export default function Home() {
               <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button
                   className="h-12 justify-center bg-[#f4c95d] px-5 text-[#101a36] hover:bg-[#f7d77b] sm:min-w-[230px]"
-                  onClick={createCheckpoint}
+                  onClick={
+                    networkSwitchNeeded
+                      ? checkCookieChainSetup
+                      : createCheckpoint
+                  }
                   disabled={isBusy}
                 >
-                  {status === 'signing' ? (
+                  {status === 'connecting' || status === 'signing' ? (
                     <LoaderCircle className="animate-spin" />
                   ) : status === 'confirmed' ? (
                     <Check />
@@ -632,6 +672,53 @@ export default function Home() {
                 )}
                 <span>{message}</span>
               </output>
+
+              {networkSwitchNeeded && (
+                <div className="mt-4 rounded-xl border border-[#526791] bg-[#172442] p-4 text-[#dbe5f4]">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-[#f8fbff]">
+                        One-time Nightly setup
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-[#b6c2d3]">
+                        Cookie Chain is a custom SVM, so Nightly may show it as
+                        “Unknown” until its RPC is added.
+                      </p>
+                    </div>
+                    <ExternalLink className="mt-0.5 size-4 shrink-0 text-[#f4c95d]" />
+                  </div>
+                  <ol className="mt-3 space-y-1.5 text-xs leading-5 text-[#c8d3e4]">
+                    <li>1. Open Nightly network settings.</li>
+                    <li>2. Open Developer mode and turn it on.</li>
+                    <li>3. Return to Choose RPC and select Custom.</li>
+                    <li>4. Save the RPC below as Cookie Chain.</li>
+                    <li>5. Return here and click Check Cookie Chain setup.</li>
+                  </ol>
+                  <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+                    <code className="min-w-0 flex-1 rounded-lg border border-[#526791] bg-[#0f1a34] px-3 py-2 text-xs text-[#f4c95d]">
+                      {COOKIE_RPC}
+                    </code>
+                    <Button
+                      className="shrink-0 border-[#526791] bg-[#22345d] text-[#f8fbff] hover:bg-[#2d4473]"
+                      onClick={copyCookieRpc}
+                      size="sm"
+                      variant="outline"
+                    >
+                      <Clipboard />
+                      {rpcCopied ? 'Copied' : 'Copy RPC'}
+                    </Button>
+                  </div>
+                  <a
+                    className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#f4c95d] hover:text-[#ffe39a]"
+                    href={COOKIE_DOCS}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open Cookie Chain wallet guide
+                    <ExternalLink className="size-3" />
+                  </a>
+                </div>
+              )}
             </CardContent>
           </Card>
 

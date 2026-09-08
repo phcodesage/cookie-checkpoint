@@ -13,7 +13,7 @@ To try a real check-in, connect Nightly on Cookie Chain and keep a small COOK ba
 ## What it does
 
 - Detects and connects to Nightly through the standard Solana wallet interface.
-- Switches Nightly to Cookie Chain when the wallet exposes network switching.
+- Verifies that Nightly is connected to Cookie Chain before allowing a transaction.
 - Reads the connected wallet's COOK balance, current slot, and recent signatures from the Cookie Chain RPC.
 - Creates a signed check-in transaction using a zero-value self-transfer and a readable Memo Program payload.
 - Waits for confirmation and links each completed checkpoint to Cookiescan.
@@ -35,6 +35,23 @@ npm run dev
 ```
 
 Open `http://localhost:3000` in a browser with Nightly installed.
+
+## One-time Nightly setup
+
+Cookie Chain is a custom SVM network. Nightly must be pointed at the Cookie Chain RPC before the first transaction:
+
+1. Open Nightly's network settings.
+2. Open **Developer mode** and turn it on.
+3. Return to **Choose RPC** and select **Custom**.
+4. Add or save the network as `Cookie Chain` with this RPC:
+
+```text
+https://rpc.cookiescan.io
+```
+
+5. Return to Cookie Checkpoint and click **Check Cookie Chain setup**.
+
+The app intentionally does not force a network change from the webpage because Nightly may show an unregistered custom network as `Unknown` and disable the approval prompt. Users should verify the RPC in Nightly before signing.
 
 ## Deploy to Vercel
 
